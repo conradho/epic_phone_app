@@ -6,25 +6,41 @@
 
 import React, { Component } from 'react';
 import {
+  Alert,
   AppRegistry,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 
+const APIKEY = 'xxxxxxxxxxxxxxx';
 export default class CoolBeans extends Component {
+  state = { location: 'wherrees are uuu'}
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${APIKEY}`
+        ).then(
+          result => result.json()
+        ).then(
+          result => {
+            this.setState({location: JSON.stringify(result.results[0].formatted_address)});
+          }
+        );
+      },
+      () => Alert.alert(
+        'Error', 'We were unable to get your gps location',
+      ),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          yesssss
-          Shake or press menu button for dev menu
+        <Text style={styles.body}>
+        you are at {this.state.location}
         </Text>
       </View>
     );
@@ -38,15 +54,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
+  body: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 

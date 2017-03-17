@@ -23,11 +23,11 @@ export default class CoolBeans extends Component {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${APIKEY}`
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${APIKEY}&result_type=street_address`
         ).then(
           result => result.json()
         ).then(
-          result => this.setState({location: `${result.results[0].formatted_address} (lat: ${latitude}, long: ${longitude} )`})
+          result => this.setState({location: `${result.results[0].formatted_address}`})
         );
       },
       error => Alert.alert(

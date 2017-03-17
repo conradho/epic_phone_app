@@ -1,4 +1,6 @@
 from rest_framework import serializers, viewsets
+from rest_framework.authentication import BasicAuthentication
+
 from locations.models import Coordinate
 
 

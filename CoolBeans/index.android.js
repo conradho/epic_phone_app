@@ -20,12 +20,16 @@ export default class CoolBeans extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
+        const latitude = position.coords.latitude.toFixed(6);
+        const longitude = position.coords.longitude.toFixed(6);
         fetch(
           'https://phoneapp.pythonanywhere.com/api/coordinates/',
           {
             method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json',
+            },
             body: JSON.stringify({ latitude, longitude }),
           }
         );

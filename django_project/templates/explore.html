@@ -1,0 +1,41 @@
+<html>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th>Address</th>
+        </thead>
+        <tbody id='history'>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      fetch('/api/coordinates/').then(
+        function (response) { return response.json() }
+      ).then(
+        function (data) { 
+          var tbody = document.getElementById("history");
+
+          data.forEach(
+            function (dataRow) {
+              var row = document.createElement('tr');
+              var latitude = document.createTextNode(dataRow.latitude);
+              var longitude = document.createTextNode(dataRow.longitude);
+
+              tbody.append(row);
+              var td = document.createElement('td');
+              row.append(td);
+              td.append(latitude);
+              td = document.createElement('td');
+              row.append(td);
+              td.append(longitude);
+            }
+          )
+
+        }
+      )
+    </script>
+  </body>
+</html>

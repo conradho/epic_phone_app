@@ -20,20 +20,19 @@ export default class CoolBeans extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
         fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${APIKEY}`
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${APIKEY}`
         ).then(
           result => result.json()
         ).then(
-          result => {
-            this.setState({location: JSON.stringify(result.results[0].formatted_address)});
-          }
+          result => this.setState({location: `${result.results[0].formatted_address} (lat: ${latitude}, long: ${longitude} )`})
         );
       },
-      () => Alert.alert(
-        'Error', 'We were unable to get your gps location',
+      error => Alert.alert(
+        'Error', `We were unable to get your gps location. ${JSON.stringify(error)}`,
       ),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
   }
   render() {

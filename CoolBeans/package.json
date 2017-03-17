@@ -5,6 +5,7 @@
 	"scripts": {
 		"build": "node node_modules/react-native/local-cli/cli.js run-android --no-packager",
 		"server": "react-native start",
+        "release": "cd android; ./gradlew assembleRelease; cd app/build/outputs/apk; jarsigner -verbose -keystore ../../../../../my-keystore.keystore app-release-unsigned.apk name_alias; /Users/noob/Library/Android/sdk/build-tools/25.0.2/zipalign -f -v 4 app-release-unsigned.apk final_app.apk",
 		"test": "jest"
 	},
 	"dependencies": {

@@ -15,13 +15,20 @@ import {
 
 const APIKEY = 'xxxxxxxxxxxxxxx';
 export default class CoolBeans extends Component {
-  state = { location: 'wherrees are uuu'}
+  state = { location: '[wherrees are uuu???]'}
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        fetch(
+          'https://phoneapp.pythonanywhere.com/api/coordinates/',
+          {
+            method: 'POST',
+            body: JSON.stringify({ latitude, longitude }),
+          }
+        );
         fetch(
           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${APIKEY}&result_type=street_address`
         ).then(

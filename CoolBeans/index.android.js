@@ -13,7 +13,8 @@ import {
   View,
 } from 'react-native';
 
-const APIKEY = 'xxxxxxxxxxxxxxx';
+const APIKEY = 'AIzaSyARmmE4s32sgyWffg1Oo3oWKcsw2TUTmd0';
+
 export default class CoolBeans extends Component {
   state = { location: '[wherrees are uuu???]'}
 
@@ -22,6 +23,13 @@ export default class CoolBeans extends Component {
       (position) => {
         const latitude = position.coords.latitude.toFixed(6);
         const longitude = position.coords.longitude.toFixed(6);
+        fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${APIKEY}&result_type=street_address`
+        ).then(
+          result => result.json()
+        ).then(
+          result => this.setState({location: `${result.results[0].formatted_address}`})
+        );
         fetch(
           'https://phoneapp.pythonanywhere.com/api/coordinates/',
           {
@@ -32,13 +40,6 @@ export default class CoolBeans extends Component {
             },
             body: JSON.stringify({ latitude, longitude }),
           }
-        );
-        fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${APIKEY}&result_type=street_address`
-        ).then(
-          result => result.json()
-        ).then(
-          result => this.setState({location: `${result.results[0].formatted_address}`})
         );
       },
       error => Alert.alert(

@@ -1,7 +1,7 @@
 <html>
   <body>
     <div>
-      <table>
+      <table border="1">
         <thead>
           <th>Latitude</th>
           <th>Longitude</th>
@@ -12,46 +12,40 @@
       </table>
     </div>
     <script>
-      function executeEverything() {
-        fetch('/api/coordinates/').then(
-          function (response) { return response.json() }
-        ).then(
-          function (data) { 
-            var tbody = document.getElementById("history");
-            var geocoder  = new google.maps.Geocoder();             // create a geocoder object
-
-            data.forEach(
-              function (dataRow) {
-                var row = document.createElement('tr');
+      fetch('/api/coordinates/').then(
+        function (response) { return response.json() }
+      ).then(
+        function (data) {
+          var tbody = document.getElementById("history");
+          data.forEach(
+            function (dataRow) {
+              var row = document.createElement('tr');
                 var latitude = document.createTextNode(dataRow.latitude);
-                var longitude = document.createTextNode(dataRow.longitude);
-
-                tbody.append(row);
-                var td = document.createElement('td');
+              var longitude = document.createTextNode(dataRow.longitude);
+              tbody.append(row);
+              var td = document.createElement('td');
+              row.append(td);
+              td.append(latitude);
+              td = document.createElement('td');
                 row.append(td);
-                td.append(latitude);
-                td = document.createElement('td');
-                row.append(td);
-                td.append(longitude);
-
-                var location  = new google.maps.LatLng(dataRow.latitude, dataRow.longitude);
-                geocoder.geocode(
-                  {'latLng': location},
-                  function (results, status) {
-                    if(status == google.maps.GeocoderStatus.OK) {           // if geocode success
-                      var address = document.createTextNode(results[0].formatted_address);
-                      td = document.createElement('td');
-                      row.append(td);
-                      td.append(address);
-                    }
-                  }
-                )
-              }
-            )
+              td.append(longitude);
+              console.log('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + dataRow.latitude + ',' + dataRow.longitude + '&key=AIzaSyARmmE4s32sgyWffg1Oo3oWKcsw2TUTmd0&result_type=street_address')
+              fetch(
+                'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + dataRow.latitude + ',' + dataRow.longitude + '&key=AIzaSyARmmE4s32sgyWffg1Oo3oWKcsw2TUTmd0&result_type=street_address'
+              ).then(
+                function (response) { return response.json() }
+              ).then(
+                function (data) {
+                  var address = document.createTextNode(data.results[0].formatted_address);
+                  td = document.createElement('td');
+                  row.append(td);
+                  td.append(address);
+                }
+              )
+            }
+          )
           }
         )
-      }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARmmE4s32sgyWffg1Oo3oWKcsw2TUTmd0&callback=executeEverything"></script>
   </body>
 </html>
